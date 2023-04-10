@@ -230,9 +230,30 @@ gateway.networking.istio.io/web-gateway created
 
 14. deploy the rate limiting service
 ```
+
 $ kube apply -f ratelimit/manifest.yaml 
 ```
 15. apply configMap for setting up descriptors
+you can modify the rate limiting settings from here : 
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ratelimit-config
+data:
+  config.yaml: |
+    domain: ratelimit
+    descriptors:
+      - key: USER_AGENT
+        value: "hogehoge"
+        rate_limit:
+          unit: minute
+          requests_per_unit: 5
+      - key: PATH
+        rate_limit:
+          unit: minute
+          requests_per_unit: 5
+```
 ```
 $ kube apply -f ratelimit/config.yaml
 ```
